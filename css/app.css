@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    background-color: #ffffff;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.wrapper > h2 {
+    font-size: 2rem;
+    font-weight: 100;
+    color: #111111;
+}
+
+.wrapper > .game-control {
+    width: 50rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2rem 2rem;
+}
+
+.wrapper > .game-control > .stars {
+
+}
+
+.wrapper > .game-control > .moves {
+    font-size: 1.125rem;
+    font-weight: normal;
+}
+
+.wrapper > .game-control > .reset > button {
+    color: #ffffff;
+    border: none;
+    outline: none;
+    background-color: #3187ff;
+    font-size: 1rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.wrapper > .game-content {
+    width: 40rem;
+    height: 40rem;
+    background: linear-gradient(0deg, #cca057 0%, #00b8e8 100%);
+    display: flex;
+    justify-content: space-between;
+    align-content: space-between;
+    flex-wrap: wrap;
+    padding: 2rem;
+    box-sizing: border-box;
+    border-radius: 1rem;
+    box-shadow: 5px 5px 30px 2px #435b77;
+}
+
+.wrapper > .game-content > .card {
+    width: 8rem;
+    height: 8rem;
+    color: #ffffff;
+    position: relative;
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 10px 1px #466173;
+    cursor: pointer;
+    z-index: 2;
+    transition: transform 0.3s;
+}
+
+.rotateY {
+    transform: rotateY(180deg);
+}
+
+.wrapper > .game-content > .card:hover {
+
+}
+
+.wrapper > .game-content > .card > .front-side {
+    position: absolute;
+    width: 8rem;
+    height: 8rem;
+    background-color: #335673;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    z-index: 10;
+    transition: background-color 0.3s;
+}
+
+.wrapper > .game-content > .card > .front-side:hover{
+    background-color: #3cb7a6;
+}
+
+.wrapper > .game-content > .card > .back-side {
+    position: relative;
+    width: 8rem;
+    height: 8rem;
+    background-color: #3e5ad3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    transform: rotateY(180deg);
+    z-index: 9;
+}
+
+.wrapper > .game-content > .card > .back-side:hover {
+
+}
