@@ -1,6 +1,7 @@
 body {
     margin: 0;
     background-color: #ffffff;
+    font-family: FontAwesome, sans-serif;
 }
 
 .wrapper {
@@ -8,7 +9,6 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
 }
 
 .wrapper > h2 {
@@ -18,7 +18,7 @@ body {
 }
 
 .wrapper > .game-control {
-    width: 50rem;
+    width: 60rem;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -29,8 +29,13 @@ body {
 
 }
 
-.wrapper > .game-control > .moves {
-    font-size: 1.125rem;
+.wrapper > .game-control > .move {
+    font-size: 1.25rem;
+    font-weight: normal;
+}
+
+.wrapper > .game-control > .timer {
+    font-size: 1.25rem;
     font-weight: normal;
 }
 

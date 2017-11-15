@@ -1,11 +1,38 @@
 /*游戏的处理逻辑文件*/
 
 /*卡片icon数组*/
+var cardClassList = [
+    {name: "camera", icon: "fa-camera-retro"},
+    {name: "telegram", icon: "fa-telegram"},
+    {name: "car", icon: "fa-car"},
+    {name: "bicycle", icon: "fa-bicycle"},
+    {name: "bolt", icon: "fa-bolt"},
+    {name: "birthday-cake", icon: "fa-birthday-cake"},
+    {name: "heart", icon: "fa-heart"},
+    {name: "snowflake-o", icon: "fa-snowflake-o"},
+    {name: "chrome", icon: "fa-chrome"},
+    {name: "github", icon: "fa-github"},
+    {name: "qq", icon: "fa-qq"},
+    {name: "pagelines", icon: "fa-pagelines"},
+    {name: "tree", icon: "fa-tree"},
+    {name: "apple", icon: "fa-apple"},
+    {name: "file", icon: "fa-file"},
+    {name: "television", icon: "fa-television"}
+];
 
+/*游戏步数*/
+var moves = 0;
+
+/*定时器的全局对象*/
+var time = 0, timer = null, timeObject = {h: 0, m: 0, s: 0},
+    timeDisplay = {h: '00', m: '00', s: '00'};
+
+function initCardClassList() {
+
+}
 
 /*注册卡片点击事件*
 *卡片正面点击事件*/
-var moves = 0;
 
 function displayMoves() {
     $("#moves").text(moves);
@@ -27,10 +54,6 @@ $(".back-side").click(function () {
     clickedCard.toggleClass("rotateY");
     frontSide.fadeToggle(300);
 });
-
-/*定时器的全局对象*/
-var time = 0, timer = null, timeObject = {h: 0, m: 0, s: 0},
-    timeDisplay = {h: '00', m: '00', s: '00'};
 
 /*启动定时器函数*/
 function startTimer() {

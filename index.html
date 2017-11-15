@@ -11,19 +11,23 @@
 <body>
     <div class="wrapper">
         <h2>Memory Game</h2>
-        <div class="game-control" id="control">
+        <section class="game-control" id="control">
             <div class="stars">
+                <span>Score:</span>
                 <i class="fa fa-star" aria-hidden="true"></i>
                 <i class="fa fa-star" aria-hidden="true"></i>
                 <i class="fa fa-star" aria-hidden="true"></i>
             </div>
-            <div class="moves">
-                <span>10</span> Moves
+            <div class="move">
+                <span id="moves">0</span> Moves
+            </div>
+            <div class="timer">
+                00:00:00
             </div>
             <div class="reset">
                 <button><i class="fa fa-refresh"></i> Reset</button>
             </div>
-        </div>
+        </section>
         <div class="game-content" id="game">
             <div class="card">
                 <div class="front-side"><i class="fa fa-question fa-2x" aria-hidden="true"></i></div>
