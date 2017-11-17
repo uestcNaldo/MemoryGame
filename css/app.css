@@ -94,7 +94,7 @@ body {
     align-items: center;
     border-radius: 0.5rem;
     z-index: 10;
-    transition: background-color 0.3s;
+    transition: background-color 0.5s;
 }
 
 .wrapper > .game-content > .card > .front-side:hover{
@@ -116,4 +116,12 @@ body {
 
 .wrapper > .game-content > .card > .back-side:hover {
 
+}
+
+.wrapper > .game-content > .card > .successful {
+    background-color: green;
+}
+
+.wrapper > .game-content > .card > .failed {
+    background-color: red;
 }
