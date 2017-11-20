@@ -111,30 +111,38 @@ function setCardsSuccess(list) {
         frontSide = itemCard.find(".front-side");
         backSide = itemCard.find(".back-side");
         backSide.addClass("successful");
-        frontSide.remove();
         isMatched[t.index] = 1;
+        backSide.off("click.backSide");
     });
     if (isFinish(isMatched)) {
-
+        window.setTimeout(function () {
+            var modalWrapper = $(".modal-wrapper");
+            var getStars = modalWrapper.find(".get-stars");
+            var getTime = modalWrapper.find(".get-time");
+            getStars.text(getStars.text() + stars + " Stars");
+            getTime.text(getTime.text() + $(".timer").text());
+            $(".modal").css("z-index", "11");
+        }, 1000)
     }
 }
 
 /*匹配失败操作*/
 function setCardsFail(list) {
     var timeID;
-    list.forEach(function (t, index) {
+    list.forEach(function (t) {
         var itemCard, backSide, frontSide;
         itemCard = $("#game").find(">.card").eq(t.index);
         frontSide = itemCard.find(".front-side");
         backSide = itemCard.find(".back-side");
         backSide.toggleClass("failed");
-        timeID = window.setTimeout(delay, 650, itemCard, frontSide, backSide);
+        timeID = window.setTimeout(delay, 500, itemCard, frontSide, backSide);
     });
 }
 
+/*延迟函数*/
 function delay(card, front, back) {
     card.toggleClass("rotateY");
-    front.toggle(250);
+    front.toggle(200);
     back.toggleClass("failed");
 }
 
@@ -150,6 +158,11 @@ function clickFrontSide() {
         displayMoves();
         displayCardList[index].index = index;
         clickedCardList.push(displayCardList[index]);
+        if (stars === 3 && moves >= 16 && moves < 24){
+            decreaseStars(3);
+        }else if (stars === 2 && moves >= 24 && moves < 32){
+            decreaseStars(2);
+        }
     }
     if (clickedCardList.length === 2) {
         isMatch = matchCards(clickedCardList);
@@ -170,24 +183,28 @@ function matchCards(list) {
 /*卡片背面点击事件*/
 function clickBackSide() {
     var clickedCard = $(this).parent();
-    var frontSide = $(this).prev();
-    if (isMatched[clickedCard.index()] === 0) {
-        clickedCard.toggleClass("rotateY");
-        frontSide.toggle(300);
-        clickedCardList.pop();
-    }
+    var frontSide = $(this).siblings(".front-side");
+    clickedCard.toggleClass("rotateY");
+    frontSide.toggle(200);
+    clickedCardList.pop();
 }
 
+/*游戏是否成功*/
 function isFinish(list) {
     return list.every(function (t) {
         return t === 1;
     });
 }
 
-function decreaseStars() {
+/*星星减少函数*/
+function decreaseStars(index) {
     if (stars > 0 && stars <= 3){
+        var lastStar = $(".stars").find("i").eq(index-1);
+        console.log(lastStar);
+        lastStar.removeClass("fa-star");
+        lastStar.addClass("fa-star-o");
         stars--;
-        
+        console.log("stars-after: "+stars);
     }
 }
 
@@ -199,9 +216,6 @@ function displayMoves() {
 /*启动定时器函数*/
 function startTimer() {
     time++;
-    if (time > 30 && time <= 50) {
-
-    }
     convertToTime(time);
     timeDisplay.h = convertToDoubleDigit(timeObject.h);
     timeDisplay.m = convertToDoubleDigit(timeObject.m);
@@ -231,6 +245,7 @@ function displayTimer() {
     $(".timer").text(timeDisplay.h + ":" + timeDisplay.m + ":" + timeDisplay.s);
 }
 
+/*重置游戏函数*/
 function resetGame() {
     time = 0;
     timeDisplay = {h: '00', m: '00', s: '00'};
@@ -239,7 +254,32 @@ function resetGame() {
     timer = setInterval(startTimer, 1000);
     moves = 0;
     displayMoves();
+    if (clickedCardList.length === 1){
+        var index = clickedCardList[0].index;
+        var itemCard = $("#game").find(".card").eq(index);
+        var frontSide = itemCard.find(".front-side");
+        itemCard.toggleClass("rotateY");
+        frontSide.toggle(200);
+        clickedCardList.pop();
+    }
+    isMatched.forEach(function (t, number) {
+        if (t === 1){
+            var itemCard = $("#game").find(".card").eq(number);
+            var frontSide = itemCard.find(".front-side");
+            var backSide = itemCard.find(".back-side");
+            itemCard.toggleClass("rotateY");
+            frontSide.toggle(200);
+            backSide.removeClass("successful");
+        }
+    });
+    isMatched.fill(0);
+    stars = 3;
+    $(".stars").find(".fa-star-o").removeClass("fa-star-o").addClass("fa-star");
+}
 
+/*重新开始函数*/
+function tryAgain() {
+    window.location.reload();
 }
 
 /*document加载完成回调函数*/
@@ -254,7 +294,8 @@ $(document).ready(function () {
     //动态加载卡片类
     displayCardList = loadCardList(displayCardList);
     //注册卡片点击事件
-    $(".front-side").click(clickFrontSide);
-    $(".back-side").click(clickBackSide);
-    $("#reset").click(resetGame);
+    $(".front-side").on("click.frontSide", clickFrontSide);
+    $(".back-side").on("click.backSide", clickBackSide);
+    $("#reset").on("click.reset", resetGame);
+    $("#try").on("click.try", tryAgain);
 });

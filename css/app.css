@@ -73,7 +73,7 @@ body {
     box-shadow: 0 3px 10px 1px #466173;
     cursor: pointer;
     z-index: 2;
-    transition: transform 0.3s;
+    transition: transform 300ms;
 }
 
 .rotateY {
@@ -94,7 +94,7 @@ body {
     align-items: center;
     border-radius: 0.5rem;
     z-index: 10;
-    transition: background-color 0.5s;
+    transition: background-color 500ms;
 }
 
 .wrapper > .game-content > .card > .front-side:hover{
@@ -111,6 +111,7 @@ body {
     align-items: center;
     border-radius: 0.5rem;
     transform: rotateY(180deg);
+    transition: background-color 400ms;
     z-index: 9;
 }
 
@@ -119,9 +120,43 @@ body {
 }
 
 .wrapper > .game-content > .card > .successful {
-    background-color: green;
+    background-color: #21a81e;
 }
 
 .wrapper > .game-content > .card > .failed {
-    background-color: red;
+    background-color: #ff232a;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+
+}
+
+.modal > .modal-wrapper {
+    width: 25rem;
+    height: 15rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal > .modal-wrapper > .try-again {
+    color: #ffffff;
+    border: none;
+    outline: none;
+    background-color: #3187ff;
+    font-size: 1rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
 }
