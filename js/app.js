@@ -1,7 +1,7 @@
 /*游戏的处理逻辑文件*/
 
 /*卡片icon数组*/
-var cardClassList = [
+const cardClassList = [
     {name: "camera", icon: "fa-camera-retro"},
     {name: "telegram", icon: "fa-telegram"},
     {name: "car", icon: "fa-car"},
@@ -21,29 +21,29 @@ var cardClassList = [
 ];
 
 /*被选择的卡片数组（个数=8）*/
-var selectedCardList = [];
-var displayCardList = [];
+let selectedCardList = [];
+let displayCardList = [];
 
 /*游戏步数*/
-var moves = 0;
+let moves = 0;
 
 /*星星数*/
-var stars = 3;
+let stars = 3;
 
 /*定时器的全局对象*/
-var time = 0, timer = null, timeObject = {h: 0, m: 0, s: 0},
+let time = 0, timer = null, timeObject = {h: 0, m: 0, s: 0},
     timeDisplay = {h: '00', m: '00', s: '00'};
 
 /*点击卡片的缓存数组*/
-var clickedCardList = [];
-var isMatch = false;
-var isMatched = new Array(16);
+let clickedCardList = [];
+let isMatch = false;
+let isMatched = new Array(16);
 
 /*从16个元素的候选卡片类数组中选出8个*/
 function initCardClassList(list, maxLength) {
-    var resultList = [];
+    let resultList = [];
     while (resultList.length <= maxLength - 1) {
-        var item = list[getRandomInt(0, list.length - 1)];
+        let item = list[getRandomInt(0, list.length - 1)];
         if (resultList.indexOf(item) === -1) {
             resultList.push(item);
         }
@@ -60,11 +60,11 @@ function getRandomInt(min, max) {
 
 /*初始化显示卡片的数组displayCardList*/
 function initDisplayCardList(list) {
-    var resultList = [];
+    let resultList = [];
     list.forEach(function (t) {
         resultList.push(t);
         //浅拷贝
-        var obj = Object.assign({}, t);
+        let obj = Object.assign({}, t);
         resultList.push(obj);
     });
     resultList = shuffle(resultList);
@@ -73,9 +73,9 @@ function initDisplayCardList(list) {
 
 /*随机交换位置*/
 function shuffle(list) {
-    var cardTemp = {};
-    for (var i = 0; i < list.length; i++) {
-        var j;
+    let cardTemp = {};
+    for (let i = 0; i < list.length; i++) {
+        let j;
         j = getRandomInt(0, list.length - 1);
         if (i === j || list[i] === list[j]) {
             i--;
@@ -90,12 +90,12 @@ function shuffle(list) {
 
 /*动态加载卡片*/
 function loadCardList(list) {
-    var cardTemplate = "<div class=\"card\"><div class=\"front-side\"><i class=\"fa fa-question fa-2x\" aria-hidden=\"true\"></i></div><div class=\"back-side\"><i class=\"fa fa-3x\" aria-hidden=\"true\"></i></div></div>";
-    var game = $("#game");
-    var itemCard, backSide, backIcon;
+    let cardTemplate = '<div class="card"><div class="front-side"><i class="fa fa-question fa-2x" aria-hidden="true"></i></div><div class="back-side"><i class="fa fa-3x" aria-hidden="true"></i></div></div>';
+    let $game = $("#game");
+    let itemCard, backSide, backIcon;
     list.forEach(function (t) {
-        game.append(cardTemplate);
-        itemCard = $("#game").find(">.card:last-child");
+        $game.append(cardTemplate);
+        itemCard = $game.find(">.card:last-child");
         backSide = itemCard.find(".back-side");
         backIcon = backSide.find("i");
         backIcon.addClass(t.icon);
@@ -105,9 +105,10 @@ function loadCardList(list) {
 
 /*匹配成功操作*/
 function setCardsSuccess(list) {
+    let $game = $("#game");
     list.forEach(function (t) {
-        var itemCard, backSide, frontSide;
-        itemCard = $("#game").find(">.card").eq(t.index);
+        let itemCard, backSide, frontSide;
+        itemCard = $game.find(">.card").eq(t.index);
         frontSide = itemCard.find(".front-side");
         backSide = itemCard.find(".back-side");
         backSide.addClass("successful");
@@ -115,32 +116,35 @@ function setCardsSuccess(list) {
         backSide.off("click.backSide");
     });
     if (isFinish(isMatched)) {
-        window.setTimeout(function () {
-            var modalWrapper = $(".modal-wrapper");
-            var getStars = modalWrapper.find(".get-stars");
-            var getTime = modalWrapper.find(".get-time");
-            getStars.text(getStars.text() + stars + " Stars");
-            getTime.text(getTime.text() + $(".timer").text());
-            $(".modal").css("z-index", "11");
-        }, 1000)
+        window.setTimeout(displaySuccess, 1000);
     }
+}
+
+function displaySuccess() {
+    let modalWrapper = $(".modal-wrapper");
+    let getStars = modalWrapper.find(".get-stars");
+    let getTime = modalWrapper.find(".get-time");
+    getStars.text(getStars.text() + stars + " Stars");
+    getTime.text(getTime.text() + $(".timer").text());
+    $(".modal").css("z-index", "11");
 }
 
 /*匹配失败操作*/
 function setCardsFail(list) {
-    var timeID;
+    let timeID;
+    let $game = $("#game");
     list.forEach(function (t) {
-        var itemCard, backSide, frontSide;
-        itemCard = $("#game").find(">.card").eq(t.index);
+        let itemCard, backSide, frontSide;
+        itemCard = $game.find(">.card").eq(t.index);
         frontSide = itemCard.find(".front-side");
         backSide = itemCard.find(".back-side");
         backSide.toggleClass("failed");
-        timeID = window.setTimeout(delay, 500, itemCard, frontSide, backSide);
+        timeID = window.setTimeout(delayFailed, 500, itemCard, frontSide, backSide);
     });
 }
 
 /*延迟函数*/
-function delay(card, front, back) {
+function delayFailed(card, front, back) {
     card.toggleClass("rotateY");
     front.toggle(200);
     back.toggleClass("failed");
@@ -149,13 +153,11 @@ function delay(card, front, back) {
 /*卡片正面点击事件*/
 function clickFrontSide() {
     if (clickedCardList.length >= 0 && clickedCardList.length < 2) {
-        var clickedCard = $(this).parent();
-        var frontSide = $(this);
-        var index = clickedCard.index();
+        let clickedCard = $(this).parent();
+        let frontSide = $(this);
+        let index = clickedCard.index();
         clickedCard.toggleClass("rotateY");
         frontSide.toggle(100);
-        moves++;
-        displayMoves();
         displayCardList[index].index = index;
         clickedCardList.push(displayCardList[index]);
         if (stars === 3 && moves >= 16 && moves < 24){
@@ -166,6 +168,8 @@ function clickFrontSide() {
     }
     if (clickedCardList.length === 2) {
         isMatch = matchCards(clickedCardList);
+        moves++;
+        displayMoves();
         if (isMatch){
             setCardsSuccess(clickedCardList);
         } else {
@@ -182,8 +186,8 @@ function matchCards(list) {
 
 /*卡片背面点击事件*/
 function clickBackSide() {
-    var clickedCard = $(this).parent();
-    var frontSide = $(this).siblings(".front-side");
+    let clickedCard = $(this).parent();
+    let frontSide = $(this).siblings(".front-side");
     clickedCard.toggleClass("rotateY");
     frontSide.toggle(200);
     clickedCardList.pop();
@@ -199,12 +203,10 @@ function isFinish(list) {
 /*星星减少函数*/
 function decreaseStars(index) {
     if (stars > 0 && stars <= 3){
-        var lastStar = $(".stars").find("i").eq(index-1);
-        console.log(lastStar);
+        let lastStar = $(".stars").find("i").eq(index-1);
         lastStar.removeClass("fa-star");
         lastStar.addClass("fa-star-o");
         stars--;
-        console.log("stars-after: "+stars);
     }
 }
 
@@ -225,7 +227,7 @@ function startTimer() {
 
 /*秒数转换为时间函数*/
 function convertToTime(num) {
-    var deltaDateObject = new Date(num*1000);
+    let deltaDateObject = new Date(num*1000);
     timeObject.h = deltaDateObject.getHours() - 8;
     timeObject.m = deltaDateObject.getMinutes();
     timeObject.s = deltaDateObject.getSeconds();
@@ -255,18 +257,18 @@ function resetGame() {
     moves = 0;
     displayMoves();
     if (clickedCardList.length === 1){
-        var index = clickedCardList[0].index;
-        var itemCard = $("#game").find(".card").eq(index);
-        var frontSide = itemCard.find(".front-side");
+        let index = clickedCardList[0].index;
+        let itemCard = $("#game").find(".card").eq(index);
+        let frontSide = itemCard.find(".front-side");
         itemCard.toggleClass("rotateY");
         frontSide.toggle(200);
         clickedCardList.pop();
     }
     isMatched.forEach(function (t, number) {
         if (t === 1){
-            var itemCard = $("#game").find(".card").eq(number);
-            var frontSide = itemCard.find(".front-side");
-            var backSide = itemCard.find(".back-side");
+            let itemCard = $("#game").find(".card").eq(number);
+            let frontSide = itemCard.find(".front-side");
+            let backSide = itemCard.find(".back-side");
             itemCard.toggleClass("rotateY");
             frontSide.toggle(200);
             backSide.removeClass("successful");
